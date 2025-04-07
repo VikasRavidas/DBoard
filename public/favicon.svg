@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="100" fill="#3B82F6"/>
+  
+  <!-- Whiteboard/Canvas -->
+  <rect x="96" y="96" width="320" height="320" rx="20" fill="white"/>
+  
+  <!-- Drawing Elements -->
+  <path d="M160 256 L240 180 L320 256 L352 220" 
+        stroke="#1D4ED8" 
+        stroke-width="24" 
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+  
+  <!-- Pencil -->
+  <path d="M280 300 L340 240 L360 260 L300 320 L280 300Z" 
+        fill="#2563EB"/>
+  <path d="M270 310 L260 330 L280 320" 
+        fill="#2563EB"/>
+</svg> 
