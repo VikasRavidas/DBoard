@@ -3,9 +3,9 @@ import getStroke from "perfect-freehand";
 
 import rough from "roughjs/bin/rough";
 import { getArrowHeadsCoordinates } from "./math.jsx";
-import { generator } from "../utils/rough";
 
-const gen = rough.generator();
+
+const generator = rough.generator();
 
 export const createElement = ({
   id,

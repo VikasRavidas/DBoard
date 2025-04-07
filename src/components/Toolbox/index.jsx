@@ -11,8 +11,16 @@ import { useToolbox } from "../store/toolbox-provider";
 import { FaPalette, FaChevronRight } from "react-icons/fa";
 
 const Toolbox = () => {
-  const { activeToolItems } = useContext(BoardContext);
-  const { toolboxState, changeStroke, changeFill, changeSize } = useToolbox();
+  const { activeToolItems, handleSetEraserSize, eraserSize } =
+    useContext(BoardContext);
+  const {
+    toolboxState,
+    changeStroke,
+    changeFill,
+    changeSize,
+    changeFontFamily,
+    fontFamilies,
+  } = useToolbox();
   const [isMinimized, setIsMinimized] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -22,6 +30,7 @@ const Toolbox = () => {
   const showStroke = STROKE_TOOL_TYPES.includes(activeToolItems);
   const showFill = FILL_TOOL_TYPES.includes(activeToolItems);
   const showSize = SIZE_TOOL_TYPES.includes(activeToolItems);
+  const showEraserSize = activeToolItems === TOOL_ITEMS.ERASER;
 
   // Get the current color based on the active tool
   const getCurrentColor = () => {
@@ -43,6 +52,46 @@ const Toolbox = () => {
   };
 
   const currentColor = getCurrentColor();
+
+  const handleSizeChange = (e, tool) => {
+    const newSize = parseInt(e.target.value);
+    if (!isNaN(newSize)) {
+      changeSize(tool, newSize);
+    }
+  };
+
+  const getMaxSize = (tool) => {
+    switch (tool) {
+      case TOOL_ITEMS.TEXT:
+        return 100; // Increased max size for text
+      case TOOL_ITEMS.ERASER:
+        return 50;
+      default:
+        return 20;
+    }
+  };
+
+  const getMinSize = (tool) => {
+    switch (tool) {
+      case TOOL_ITEMS.TEXT:
+        return 12; // Minimum text size
+      case TOOL_ITEMS.ERASER:
+        return 5;
+      default:
+        return 1;
+    }
+  };
+
+  const getDefaultSize = (tool) => {
+    switch (tool) {
+      case TOOL_ITEMS.TEXT:
+        return 24; // Medium size for text
+      case TOOL_ITEMS.ERASER:
+        return 20;
+      default:
+        return 2;
+    }
+  };
 
   return (
     <>
@@ -128,14 +177,64 @@ const Toolbox = () => {
               <h3 className="text-sm font-semibold mb-2">Size</h3>
               <input
                 type="range"
-                min="1"
-                max="20"
-                value={toolboxState[activeToolItems]?.size || 1}
-                onChange={(e) =>
-                  changeSize(activeToolItems, parseInt(e.target.value))
+                min={getMinSize(activeToolItems)}
+                max={getMaxSize(activeToolItems)}
+                value={
+                  toolboxState[activeToolItems]?.size ||
+                  getDefaultSize(activeToolItems)
                 }
+                onChange={(e) => handleSizeChange(e, activeToolItems)}
                 className="w-full"
               />
+              <div className="text-xs text-gray-500 mt-1 text-center">
+                {toolboxState[activeToolItems]?.size ||
+                  getDefaultSize(activeToolItems)}
+                px
+              </div>
+            </div>
+          )}
+
+          {showEraserSize && (
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold mb-2">Eraser Size</h3>
+              <input
+                type="range"
+                min="5"
+                max="50"
+                value={eraserSize}
+                onChange={(e) => handleSetEraserSize(parseInt(e.target.value))}
+                className="w-full"
+              />
+              <div className="text-xs text-gray-500 mt-1 text-center">
+                {eraserSize}px
+              </div>
+            </div>
+          )}
+
+          {activeToolItems === TOOL_ITEMS.TEXT && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Font Family
+              </label>
+              <select
+                value={toolboxState[TOOL_ITEMS.TEXT].fontFamily}
+                onChange={(e) => {
+                  console.log("Changing font to:", e.target.value);
+                  changeFontFamily(TOOL_ITEMS.TEXT, e.target.value);
+                }}
+                className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{ fontFamily: toolboxState[TOOL_ITEMS.TEXT].fontFamily }}
+              >
+                {fontFamilies.map((font) => (
+                  <option
+                    key={font.name}
+                    value={font.name}
+                    style={{ fontFamily: font.name }}
+                  >
+                    {font.label}
+                  </option>
+                ))}
+              </select>
             </div>
           )}
         </div>
