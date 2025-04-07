@@ -1,9 +1,9 @@
 {
-  "name": "white-board",
+  "name": "DBoard",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://vikasravidas789.github.io/white-board",
+  "homepage": "https://VikasRavidas.github.io/DBoard",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
